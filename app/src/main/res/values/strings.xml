@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">SmartHealth</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">From the Square world,\nHello, %1$s!</string>
+    <string name="tile_label">Example tile</string>
+    <string name="complication_label">Example complication</string>
+    <string name="broken_heart_description">Broken heart</string>
+    <string name="not_available">Not available on this device</string>
+    <string name="last_measured">Last measurement</string>
+    <string name="heart_description">Heart</string>
+    <string name="heart_rate_toggle">Heart rate</string>
+</resources>

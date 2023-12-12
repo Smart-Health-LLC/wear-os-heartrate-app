@@ -1,0 +1,93 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    compileSdk 34
+    namespace = "com.progneo.smarthealth"
+
+    defaultConfig {
+        applicationId "com.progneo.smarthealth"
+        minSdk 30
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            signingConfig signingConfigs.debug
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.majorVersion
+        freeCompilerArgs += "-Xjvm-default=all"
+        freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
+        freeCompilerArgs += "-opt-in=androidx.wear.compose.material.ExperimentalWearMaterialApi"
+        freeCompilerArgs += "-opt-in=androidx.compose.animation.ExperimentalAnimationApi"
+        freeCompilerArgs += "-opt-in=com.google.android.horologist.annotations.ExperimentalHorologistApi"
+        freeCompilerArgs += "-opt-in=com.google.accompanist.permissions.ExperimentalPermissionsApi"
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+}
+
+dependencies {
+
+    def composeBom = platform(libs.androidx.compose.bom)
+
+    // General compose dependencies
+    implementation composeBom
+    implementation libs.androidx.activity.compose
+    implementation libs.compose.ui.tooling
+    implementation libs.compose.ui.tooling.preview
+    implementation libs.androidx.wear.tooling.preview
+
+    implementation libs.wear.compose.material
+    implementation libs.wear.compose.foundation
+
+    implementation libs.androidx.lifecycle.viewmodel.compose
+    implementation libs.compose.material.icons.extended
+
+    implementation libs.core.splashscreen
+
+    // Health Services
+    implementation libs.androidx.health.services
+
+    // Bridge between Futures and coroutines
+    implementation libs.guava
+    implementation libs.concurrent.futures
+
+    // WorkManager
+    implementation libs.androidx.work
+    implementation libs.androidx.work.ktx
+
+    // Datastore
+    implementation libs.androidx.datastore
+
+    // Permissions
+    implementation libs.accompanist.permissions
+
+    // Horologist
+    implementation(libs.horologist.compose.tools)
+    implementation(libs.horologist.tiles)
+
+    implementation(libs.play.services.wearable)
+}
