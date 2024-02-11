@@ -5,29 +5,37 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.util.Log
+import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.progneo.smarthealth.PERMISSION
-import com.progneo.smarthealth.data.HealthServicesRepository
-import com.progneo.smarthealth.data.PassiveDataRepository
+import com.progneo.smarthealth.data.repository.HealthServicesRepository
+import com.progneo.smarthealth.data.repository.PassiveDataRepository
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
+@AndroidEntryPoint
 class StartupReceiver : BroadcastReceiver() {
 
+    @Inject
+    lateinit var passiveDataRepository: PassiveDataRepository
+
     override fun onReceive(context: Context, intent: Intent) {
-        val repository = PassiveDataRepository(context)
         if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
 
         runBlocking {
-            if (repository.passiveDataEnabled.first()) {
+            if (passiveDataRepository.passiveDataEnabled.first()) {
                 val result = context.checkSelfPermission(PERMISSION)
                 if (result == PackageManager.PERMISSION_GRANTED) {
                     scheduleWorker(context)
                 } else {
-                    repository.setPassiveDataEnabled(false)
+                    passiveDataRepository.setPassiveDataEnabled(false)
                 }
             }
         }
@@ -41,16 +49,17 @@ class StartupReceiver : BroadcastReceiver() {
     }
 }
 
-class RegisterForBackgroundDataWorker(
-    private val appContext: Context,
-    workerParams: WorkerParameters
-) :
+@HiltWorker
+class RegisterForBackgroundDataWorker @AssistedInject constructor(
+    @Assisted appContext: Context,
+    @Assisted workerParams: WorkerParameters
+) : CoroutineWorker(appContext, workerParams) {
 
-    CoroutineWorker(appContext, workerParams) {
+    @Inject
+    lateinit var healthServicesRepository: HealthServicesRepository
 
     override suspend fun doWork(): Result {
         Log.i(javaClass.simpleName, "Worker running")
-        val healthServicesRepository = HealthServicesRepository(appContext)
         healthServicesRepository.registerForHeartRateData()
         return Result.success()
     }

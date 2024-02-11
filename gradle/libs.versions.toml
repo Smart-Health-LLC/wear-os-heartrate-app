@@ -16,12 +16,15 @@ guava = "32.1.3-android"
 health-services = "1.0.0-rc01"
 ktlint = "0.46.1"
 org-jetbrains-kotlin = "1.9.10"
+dagger = "2.50"
+hilt = "1.0.0"
 org-jetbrains-kotlinx = "1.6.0"
 core-splashscreen = "1.0.1"
 horologist-compose-tools = "0.4.8"
 horologist-tiles = "0.4.8"
 play-services-wearable = "18.1.0"
 wear-tooling-preview = "1.0.0"
+ksp = "1.9.0-1.0.12"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist-permissions" }
@@ -47,8 +50,15 @@ core-splashscreen = { group = "androidx.core", name = "core-splashscreen", versi
 horologist-compose-tools = { group = "com.google.android.horologist", name = "horologist-compose-tools", version.ref = "horologist-compose-tools" }
 horologist-tiles = { group = "com.google.android.horologist", name = "horologist-tiles", version.ref = "horologist-tiles" }
 play-services-wearable = { group = "com.google.android.gms", name = "play-services-wearable", version.ref = "play-services-wearable" }
+hilt-android-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "dagger" }
+dagger-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "dagger" }
+dagger-hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "dagger" }
+hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt" }
+hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hilt" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 com-diffplug-spotless = "com.diffplug.spotless:6.23.2"
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin" }
+com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+com-google-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }

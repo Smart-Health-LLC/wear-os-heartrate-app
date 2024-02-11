@@ -16,5 +16,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "ComposeAdvanced"
+rootProject.name = "HeartrateApp"
 include ":app"

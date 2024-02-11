@@ -3,12 +3,17 @@ package com.progneo.smarthealth.service
 import androidx.health.services.client.PassiveListenerService
 import androidx.health.services.client.data.DataPointContainer
 import androidx.health.services.client.data.DataType
-import com.progneo.smarthealth.data.PassiveDataRepository
 import com.progneo.smarthealth.data.latestHeartRate
+import com.progneo.smarthealth.data.repository.PassiveDataRepository
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlinx.coroutines.runBlocking
 
+@AndroidEntryPoint
 class PassiveDataService : PassiveListenerService() {
-    private val repository = PassiveDataRepository(this)
+
+    @Inject
+    lateinit var repository: PassiveDataRepository
 
     override fun onNewDataPointsReceived(dataPoints: DataPointContainer) {
         runBlocking {

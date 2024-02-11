@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.devtools.ksp'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -86,8 +88,14 @@ dependencies {
     implementation libs.accompanist.permissions
 
     // Horologist
-    implementation(libs.horologist.compose.tools)
-    implementation(libs.horologist.tiles)
+    implementation libs.horologist.compose.tools
+    implementation libs.horologist.tiles
 
-    implementation(libs.play.services.wearable)
+    implementation libs.play.services.wearable
+
+    // Hilt
+    implementation libs.dagger.hilt.android
+    implementation libs.hilt.navigation.compose
+    implementation libs.hilt.work
+    ksp libs.dagger.hilt.android.compiler
 }

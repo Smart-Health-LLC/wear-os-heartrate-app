@@ -36,7 +36,7 @@ fun HeartRateCard(
         ) {
             Icon(
                 imageVector = Icons.Default.Favorite,
-                contentDescription = stringResource(R.string.heart_description),
+                contentDescription = stringResource(id = R.string.heart_description),
                 tint = Color.Red,
                 modifier = Modifier.padding(end = 8.dp)
             )

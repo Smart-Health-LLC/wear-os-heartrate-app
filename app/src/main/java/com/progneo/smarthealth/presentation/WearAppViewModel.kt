@@ -3,16 +3,18 @@ package com.progneo.smarthealth.presentation
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.progneo.smarthealth.data.HealthServicesRepository
-import com.progneo.smarthealth.data.PassiveDataRepository
+import com.progneo.smarthealth.data.repository.HealthServicesRepository
+import com.progneo.smarthealth.data.repository.PassiveDataRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class WearAppViewModel(
+@HiltViewModel
+class WearAppViewModel @Inject constructor(
     private val healthServicesRepository: HealthServicesRepository,
     private val passiveDataRepository: PassiveDataRepository
 ) : ViewModel() {
@@ -57,22 +59,22 @@ class WearAppViewModel(
     }
 }
 
-class PassiveDataViewModelFactory(
-    private val healthServicesRepository: HealthServicesRepository,
-    private val passiveDataRepository: PassiveDataRepository
-) : ViewModelProvider.Factory {
-
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(WearAppViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return WearAppViewModel(
-                healthServicesRepository = healthServicesRepository,
-                passiveDataRepository = passiveDataRepository
-            ) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-}
+// class PassiveDataViewModelFactory(
+//     private val healthServicesRepository: HealthServicesRepository,
+//     private val passiveDataRepository: PassiveDataRepository
+// ) : ViewModelProvider.Factory {
+//
+//     override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//         if (modelClass.isAssignableFrom(WearAppViewModel::class.java)) {
+//             @Suppress("UNCHECKED_CAST")
+//             return WearAppViewModel(
+//                 healthServicesRepository = healthServicesRepository,
+//                 passiveDataRepository = passiveDataRepository
+//             ) as T
+//         }
+//         throw IllegalArgumentException("Unknown ViewModel class")
+//     }
+// }
 
 sealed class MainUiState {
     data object Startup : MainUiState()

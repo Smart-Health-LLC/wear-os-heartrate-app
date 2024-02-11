@@ -5,7 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.progneo.smarthealth.presentation.WearApp
+import com.progneo.smarthealth.presentation.theme.WearAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,14 +18,10 @@ class MainActivity : ComponentActivity() {
 
         setTheme(android.R.style.Theme_DeviceDefault)
 
-        val healthServicesRepository = (application as MainApplication).healthServicesRepository
-        val passiveDataRepository = (application as MainApplication).passiveDataRepository
-
         setContent {
-            WearApp(
-                healthServicesRepository = healthServicesRepository,
-                passiveDataRepository = passiveDataRepository
-            )
+            WearAppTheme {
+                WearApp()
+            }
         }
     }
 }
