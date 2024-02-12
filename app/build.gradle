@@ -103,4 +103,14 @@ dependencies {
     implementation libs.room.runtime
     implementation libs.room.ktx
     ksp libs.room.compiler
+
+    // Retrofit
+    implementation libs.retrofit2.retrofit
+    implementation libs.retrofit2.converter.gson
+    implementation libs.retrofit2.converter.scalars
+
+    // Okhttp
+    implementation libs.okhttp3.okhttp
+    implementation libs.okhttp3.coroutines
+    implementation libs.okhttp3.logging
 }

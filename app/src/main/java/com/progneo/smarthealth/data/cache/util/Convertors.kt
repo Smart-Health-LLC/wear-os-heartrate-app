@@ -1,4 +1,4 @@
-package com.progneo.smarthealth.dao.db
+package com.progneo.smarthealth.data.cache.util
 
 import androidx.room.TypeConverter
 import java.util.Date

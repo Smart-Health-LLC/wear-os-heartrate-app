@@ -1,13 +1,12 @@
-package com.progneo.smarthealth.dao.model
+package com.progneo.smarthealth.data.cache.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.Date
 
 @Entity(tableName = "heart_rate")
-data class CachedHeartRate(
+data class CachedHeartRateRecord(
     var rate: Double,
-    var date: Date
+    var timestamp: Long
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0

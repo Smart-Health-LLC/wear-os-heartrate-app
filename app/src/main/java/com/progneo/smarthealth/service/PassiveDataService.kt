@@ -1,13 +1,13 @@
 package com.progneo.smarthealth.service
 
-import android.util.Log
 import androidx.health.services.client.PassiveListenerService
 import androidx.health.services.client.data.DataPointContainer
 import androidx.health.services.client.data.DataType
-import com.progneo.smarthealth.data.datasource.HeartRateCacheDatasource
-import com.progneo.smarthealth.data.entity.HeartRate
 import com.progneo.smarthealth.data.repository.PassiveDataRepository
 import com.progneo.smarthealth.data.util.latestHeartRate
+import com.progneo.smarthealth.domain.model.HeartRateRecord
+import com.progneo.smarthealth.domain.repository.HeartRateCacheRepository
+import com.progneo.smarthealth.domain.repository.HeartRateRemoteRepository
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
 import javax.inject.Inject
@@ -20,14 +20,24 @@ class PassiveDataService : PassiveListenerService() {
     lateinit var repository: PassiveDataRepository
 
     @Inject
-    lateinit var heartRateDatasource: HeartRateCacheDatasource
+    lateinit var heartRateCacheRepository: HeartRateCacheRepository
+
+    @Inject
+    lateinit var heartRateRemoteRepository: HeartRateRemoteRepository
 
     override fun onNewDataPointsReceived(dataPoints: DataPointContainer) {
         runBlocking {
             dataPoints.getData(DataType.HEART_RATE_BPM).latestHeartRate()?.let {
                 repository.storeLatestHeartRate(it)
-                heartRateDatasource.addRecord(HeartRate(it, Date()))
-                Log.i(javaClass.simpleName, heartRateDatasource.getAllRecords().toString())
+                heartRateCacheRepository.addRecord(HeartRateRecord(it, Date().time))
+
+                val recordList = heartRateCacheRepository.getAllRecords()
+                if (recordList.size >= 100) {
+                    val result = heartRateRemoteRepository.sendHeartRateRecordList(recordList)
+                    if (result) {
+                        heartRateCacheRepository.deleteAllRecords()
+                    }
+                }
             }
         }
     }

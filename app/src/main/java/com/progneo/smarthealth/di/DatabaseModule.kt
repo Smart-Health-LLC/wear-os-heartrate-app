@@ -2,11 +2,13 @@ package com.progneo.smarthealth.di
 
 import android.content.Context
 import androidx.room.Room
-import com.progneo.smarthealth.dao.db.AppDatabase
-import com.progneo.smarthealth.dao.db.HeartRateDao
-import com.progneo.smarthealth.dao.mapper.HeartRateMapper
-import com.progneo.smarthealth.dao.source.HeartRateCacheDatasourceImpl
-import com.progneo.smarthealth.data.datasource.HeartRateCacheDatasource
+import com.progneo.smarthealth.data.api.service.HeartRateService
+import com.progneo.smarthealth.data.cache.db.AppDatabase
+import com.progneo.smarthealth.data.cache.db.HeartRateDao
+import com.progneo.smarthealth.data.repository.HeartRateCacheRepositoryImpl
+import com.progneo.smarthealth.data.repository.HeartRateRemoteRepositoryImpl
+import com.progneo.smarthealth.domain.repository.HeartRateCacheRepository
+import com.progneo.smarthealth.domain.repository.HeartRateRemoteRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,8 +34,13 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideHeartRateCacheDatasource(
-        heartRateDao: HeartRateDao,
-        heartRateMapper: HeartRateMapper
-    ): HeartRateCacheDatasource = HeartRateCacheDatasourceImpl(heartRateDao, heartRateMapper)
+    fun provideHeartRateCacheRepository(
+        heartRateDao: HeartRateDao
+    ): HeartRateCacheRepository = HeartRateCacheRepositoryImpl(heartRateDao)
+
+    @Provides
+    @Singleton
+    fun provideHeartRateRemoteRepository(
+        heartRateService: HeartRateService
+    ): HeartRateRemoteRepository = HeartRateRemoteRepositoryImpl(heartRateService)
 }
