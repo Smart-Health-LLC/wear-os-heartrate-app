@@ -98,4 +98,9 @@ dependencies {
     implementation libs.hilt.navigation.compose
     implementation libs.hilt.work
     ksp libs.dagger.hilt.android.compiler
+
+    // Room
+    implementation libs.room.runtime
+    implementation libs.room.ktx
+    ksp libs.room.compiler
 }

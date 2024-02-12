@@ -1,4 +1,4 @@
-package com.progneo.smarthealth.data
+package com.progneo.smarthealth.data.util
 
 import androidx.health.services.client.data.DataType
 import androidx.health.services.client.data.HeartRateAccuracy

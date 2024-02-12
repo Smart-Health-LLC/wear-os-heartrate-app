@@ -59,23 +59,6 @@ class WearAppViewModel @Inject constructor(
     }
 }
 
-// class PassiveDataViewModelFactory(
-//     private val healthServicesRepository: HealthServicesRepository,
-//     private val passiveDataRepository: PassiveDataRepository
-// ) : ViewModelProvider.Factory {
-//
-//     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//         if (modelClass.isAssignableFrom(WearAppViewModel::class.java)) {
-//             @Suppress("UNCHECKED_CAST")
-//             return WearAppViewModel(
-//                 healthServicesRepository = healthServicesRepository,
-//                 passiveDataRepository = passiveDataRepository
-//             ) as T
-//         }
-//         throw IllegalArgumentException("Unknown ViewModel class")
-//     }
-// }
-
 sealed class MainUiState {
     data object Startup : MainUiState()
     data object NotSupported : MainUiState()
