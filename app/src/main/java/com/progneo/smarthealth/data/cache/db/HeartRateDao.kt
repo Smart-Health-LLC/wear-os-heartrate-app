@@ -16,4 +16,7 @@ interface HeartRateDao {
 
     @Query("delete from heart_rate")
     fun deleteAllRecords()
+
+    @Query("select count(id) from heart_rate")
+    fun getCount(): Int
 }
