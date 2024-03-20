@@ -37,8 +37,25 @@
 
         <service
             android:name=".service.PassiveDataService"
-            android:permission="com.google.android.wearable.healthservices.permission.PASSIVE_DATA_BINDING"
-            android:exported="true" />
+            android:exported="true"
+            android:permission="com.google.android.wearable.healthservices.permission.PASSIVE_DATA_BINDING" />
+
+        <service
+            android:name=".service.sleep.GoToSleepTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_watch"
+            android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER">
+
+
+            <intent-filter>
+                <action android:name="androidx.wear.tiles.action.BIND_TILE_PROVIDER" />
+            </intent-filter>
+
+            <!-- The tile preview shown when configuring tiles on your phone -->
+            <meta-data
+                android:name="androidx.wear.tiles.PREVIEW"
+                android:resource="@drawable/tile_hello" />
+        </service>
 
         <receiver
             android:name=".service.StartupReceiver"
