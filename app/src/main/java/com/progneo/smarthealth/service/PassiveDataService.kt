@@ -11,6 +11,7 @@ import com.progneo.smarthealth.domain.repository.HeartRateRemoteRepository
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
 import javax.inject.Inject
+import javax.inject.Named
 import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
@@ -23,21 +24,38 @@ class PassiveDataService : PassiveListenerService() {
     lateinit var heartRateCacheRepository: HeartRateCacheRepository
 
     @Inject
-    lateinit var heartRateRemoteRepository: HeartRateRemoteRepository
+    @Named("api")
+    lateinit var heartRateApiRepository: HeartRateRemoteRepository
+
+    @Inject
+    @Named("socket")
+    lateinit var heartRateSocketRepository: HeartRateRemoteRepository
 
     override fun onNewDataPointsReceived(dataPoints: DataPointContainer) {
         runBlocking {
             dataPoints.getData(DataType.HEART_RATE_BPM).latestHeartRate()?.let {
                 repository.storeLatestHeartRate(it)
-                heartRateCacheRepository.addRecord(HeartRateRecord(it, Date().time))
 
-                val recordList = heartRateCacheRepository.getAllRecords()
-                if (recordList.size >= 100) {
-                    val result = heartRateRemoteRepository.sendHeartRateRecordList(recordList)
-                    if (result) {
-                        heartRateCacheRepository.deleteAllRecords()
-                    }
+                val record = HeartRateRecord(
+                    rate = it,
+                    timestamp = Date().time
+                )
+
+                if (!heartRateSocketRepository.sendHeartRateRecord(record)) {
+                    heartRateCacheRepository.addRecord(record)
+                } else {
+                    checkCacheRecordsCount()
                 }
+            }
+        }
+    }
+
+    private suspend fun checkCacheRecordsCount() {
+        val cachedRecordsCount = heartRateCacheRepository.getCount()
+        if (cachedRecordsCount != 0) {
+            val recordList = heartRateCacheRepository.getAllRecords()
+            if (!heartRateSocketRepository.sendHeartRateRecordList(recordList)) {
+                heartRateCacheRepository.deleteAllRecords()
             }
         }
     }

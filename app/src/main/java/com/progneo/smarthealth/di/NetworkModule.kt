@@ -1,14 +1,14 @@
 package com.progneo.smarthealth.di
 
-import com.progneo.smarthealth.data.api.service.HeartRateService
+import com.progneo.smarthealth.data.api.service.HeartRateApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
+import javax.inject.Singleton
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -17,11 +17,13 @@ import retrofit2.converter.gson.GsonConverterFactory
 object NetworkModule {
 
     @Provides
+    @Singleton
     @Named("BaseUrl")
     fun provideBaseUrl() = "https://localhost:8000/" // TODO: paste url
 
     @Provides
-    fun provideScheduleRetrofit(
+    @Singleton
+    fun provideRetrofit(
         @Named("BaseUrl") baseUrl: String,
         okHttpClient: OkHttpClient
     ): Retrofit {
@@ -33,13 +35,9 @@ object NetworkModule {
     }
 
     @Provides
+    @Singleton
     fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(
-                HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.HEADERS
-                }
-            )
             .addInterceptor {
                 val original = it.request()
                 val newRequestBuilder = original.newBuilder()
@@ -66,7 +64,8 @@ object NetworkModule {
     }
 
     @Provides
-    fun provideHeartRateService(
+    @Singleton
+    fun provideHeartRateApiService(
         retrofit: Retrofit
-    ): HeartRateService = retrofit.create(HeartRateService::class.java)
+    ): HeartRateApiService = retrofit.create(HeartRateApiService::class.java)
 }

@@ -1,13 +1,14 @@
 package com.progneo.smarthealth.data.api.service
 
-import com.progneo.smarthealth.domain.model.HeartRateRecord
+import com.progneo.smarthealth.data.api.model.CaptureRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-interface HeartRateService {
-    @POST("") // TODO: paste path
+interface HeartRateApiService {
+
+    @POST("captures")
     suspend fun sendHeartRateRecordList(
-        @Body list: List<HeartRateRecord>
+        @Body list: List<CaptureRequest>
     ): Response<Unit>
 }

@@ -25,4 +25,8 @@ class HeartRateCacheRepositoryImpl @Inject constructor(
     override suspend fun deleteAllRecords() {
         heartRateDao.deleteAllRecords()
     }
+
+    override suspend fun getCount(): Int {
+        return heartRateDao.getCount()
+    }
 }
